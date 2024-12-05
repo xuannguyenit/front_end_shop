@@ -1,0 +1,97 @@
+.wrapper {
+    background-color: #f9f9f9; /* Nền nhẹ nhàng */
+    padding: 20px;
+    min-height: 100vh; /* Chiều cao toàn màn hình */
+}
+
+.container {
+    background-color: #fff; /* Màu trắng cho vùng hiển thị */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto; /* Căn giữa container */
+}
+
+.title h2 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.group__content {
+    margin-top: 20px;
+    overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá rộng */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff; /* Màu nền bảng */
+    font-size: 16px;
+}
+
+thead {
+    background-color: #007bff; /* Màu xanh dương cho tiêu đề */
+    color: #fff;
+    text-align: left;
+}
+
+th,
+td {
+    padding: 10px;
+    border: 1px solid #ddd; /* Đường viền bảng */
+    text-align: left;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #f9f9f9; /* Màu nền cho các hàng lẻ */
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1; /* Màu nền khi hover */
+}
+
+.action__table {
+    display: flex;
+    gap: 10px; /* Khoảng cách giữa các nút */
+}
+
+.btn_action {
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.btn_action:hover {
+    opacity: 0.9; /* Hiệu ứng khi hover nút */
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px; /* Giảm padding trên màn hình nhỏ */
+    }
+
+    .title h2 {
+        font-size: 20px; /* Giảm kích thước chữ */
+    }
+
+    table {
+        font-size: 14px; /* Thu nhỏ chữ bảng */
+    }
+
+    .btn_action {
+        font-size: 12px; /* Thu nhỏ chữ nút */
+    }
+}
+.ul_role {
+    outline: none;
+    list-style: none;
+    display: flex;
+    margin-right: 20px;
+}

@@ -1,0 +1,38 @@
+.wrapper {
+    width: var(--defaultlayout-width);
+    min-height: 80px;
+    background: linear-gradient(25deg, #24a399, #30d6ec);
+}
+.footer {
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.copyright {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+
+    &:hover {
+        color: #f2f2f2;
+    }
+}

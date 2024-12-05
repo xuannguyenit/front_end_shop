@@ -1,0 +1,41 @@
+.wrapper {
+    width: 240px;
+
+    margin-right: 15px;
+    border: 1px #ddd solid;
+}
+.sidebar__list {
+    box-sizing: border-box;
+    ul {
+        list-style-type: none;
+        padding-right: 20px;
+    }
+}
+.title {
+    width: 240px;
+    height: 45px;
+    background: linear-gradient(25deg, #24a399, #30d6ec);
+    color: #fff;
+    align-content: center;
+    padding-left: 20px;
+}
+.sidebar__list-item {
+    height: 45px;
+    border-bottom: 1px solid #ddd;
+    align-content: end;
+}
+a {
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* Số dòng muốn hiển thị */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+
+    outline: none;
+    text-decoration: none;
+    color: #4ebaec;
+    &:hover {
+        color: #0a8dcac5;
+    }
+}

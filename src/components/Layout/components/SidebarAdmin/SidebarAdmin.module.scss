@@ -1,0 +1,65 @@
+.wrapper {
+    width: 300px;
+    background-color: rgba(236, 236, 229, 0.438);
+    box-sizing: border-box;
+    border-left: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+.sidebar {
+    width: 100%;
+    color: black;
+}
+.siderbar__title {
+    width: 300px;
+    height: 45px;
+    color: #fff;
+    background: linear-gradient(25deg, #24a399, #30d6ec);
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex;
+    align-items: center;
+    h2 {
+        margin: 0px;
+    }
+}
+.menu__siderbar {
+    padding: 0px 30px;
+    ul {
+        box-sizing: border-box;
+        width: 100%;
+        list-style: none;
+        padding: 0px;
+
+        li {
+            padding: 10px 0;
+            width: 100%;
+            border-bottom: #ddd 1px solid;
+            cursor: pointer;
+            position: relative;
+
+            &:hover {
+                background-color: #f5f5f5;
+            }
+
+            // Menu con (dropdown)
+            ul {
+                list-style: none;
+
+                padding-top: 5px;
+                display: none; /* Ẩn menu con ban đầu */
+                position: relative;
+
+                li {
+                    // padding: 5px 0;
+                    border-bottom: none;
+                }
+            }
+
+            // Khi menu con được mở
+            &.open > ul {
+                display: block; /* Hiện menu con khi mở */
+            }
+        }
+    }
+}

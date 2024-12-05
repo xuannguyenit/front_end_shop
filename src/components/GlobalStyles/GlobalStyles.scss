@@ -1,0 +1,28 @@
+@import 'normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+:root {
+    --primary: #fe2c55;
+
+    // defaulayout
+    --defaultlayout-header-height: 400px;
+    --defaultlayout-width: 1200px;
+}
+html {
+    font-size: 62.5%;
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: 'Roboto', 'Montserrat', serif;
+    font-optical-sizing: auto;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    text-rendering: optimizeSpeed;
+}
+a {
+    text-decoration: none;
+    outline: none;
+}
