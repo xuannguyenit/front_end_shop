@@ -1,60 +1,8 @@
 .wrapper {
-    height: 100%;
     width: 100%;
+    min-height: 100vh;
     border: 1px solid #ddd;
 }
-// category--------------------
-.category__future {
-    width: 100%;
-    // min-height: 250px;
-    border-bottom: 1px solid #ddd;
-}
-.category__future-title {
-    width: 35%;
-    height: 45px;
-    display: flex;
-    align-content: center;
-    margin-bottom: 20px;
-    color: #686666;
-    margin-left: 10px;
-}
-.category__future-item {
-    width: 100%;
-    // height: 205px;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-}
-.category__item {
-    width: 100px;
-    height: 160px;
-    border: none;
-}
-.category__image {
-    width: 100px;
-    height: 115px;
-    img {
-        width: 100px;
-        height: 100px;
-        border-radius: 50px;
-    }
-}
-.category__name {
-    font-size: 1.4rem;
-    color: #686666;
-    padding-left: 5px;
-    padding-right: 5px;
-    text-align: center;
-    p {
-        display: -webkit-box;
-        -webkit-line-clamp: 1; /* Số dòng muốn hiển thị */
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
-    }
-}
-// flast sale ------------------
 .product__sale {
     width: 100%;
     border-bottom: 1px solid #ddd;
@@ -149,57 +97,22 @@
         height: 30px;
         margin: auto;
         border: none;
-        border-radius: 10px;
         background: linear-gradient(25deg, #24a399, #30d6ec);
+        border-radius: 10px;
+
         &:hover {
             background: linear-gradient(25deg, #6bb9b3, #55d6e7);
         }
     }
 }
-// .pagination {
-//     width: 100%;
-//     height: 45px;
-//     text-align: right;
-//     padding: 20px;
-//     box-sizing: border-box;
-//     button {
-//         border: none;
-//         outline: none;
-//     }
-// }
 .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.pagination button {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 8px 12px;
-    margin: 0 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.pagination button:hover {
-    background-color: #f0f0f0;
-    transform: scale(1.1);
-}
-
-.pagination button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-.pagination span {
-    font-size: 16px;
-    margin: 0 10px;
-}
-
-.pagination button.active {
-    background-color: #007bff;
-    color: #fff;
+    width: 100%;
+    height: 45px;
+    text-align: right;
+    padding: 20px;
+    box-sizing: border-box;
+    button {
+        border: none;
+        outline: none;
+    }
 }

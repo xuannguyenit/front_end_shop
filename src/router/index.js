@@ -41,6 +41,8 @@ import withAuth from '~/utils/withAuth';
 import AllOrderOfUser from '~/pages/Order/AllOrderOfUser';
 import Order from '~/pages/Admin/Order/AllOrder';
 import AddImage from '~/pages/Admin/Images/AddImage';
+import Dashboard from '~/pages/Admin/Dashboard';
+import ProductByBrand from '~/pages/ProductByBrand';
 
 const publicRouters = [
     //client
@@ -48,11 +50,13 @@ const publicRouters = [
     { path: '/', component: Home },
     { path: '/following', component: Following },
     { path: '/product/:productId', component: ProductDetail }, // trang chi tiết sản phẩm
+    { path: '/product/brand/:brandId', component: ProductByBrand }, // trang chi tiết sản phẩm
+
     { path: '/category/:cateId', component: CategoryDetail },
     { path: '/profile', component: Profile },
     { path: '/upload', component: Upload, layout: HeaderOnly },
     // đăng ký dăng nhập
-    { path: '/search', component: Search, layout: null },
+    { path: '/search', component: Search },
     { path: '/register', component: Register, layout: HeaderOnly },
     // giở hàng
     { path: '/cart/:userId', component: Cart, layout: HeaderOnly },
@@ -65,6 +69,7 @@ const publicRouters = [
 
     // admin
     { path: '/admin/home', component: withAdminAuth(HomeAdmin), layout: AdminLayout },
+    { path: '/admin/dashboard', component: withAdminAuth(Dashboard), layout: AdminLayout },
     // user
     { path: '/admin/users', component: withAdminAuth(AllUser), layout: AdminLayout },
     { path: '/admin/users/createadmin', component: withAdminAuth(AddAdmin), layout: AdminLayout },

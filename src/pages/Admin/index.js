@@ -241,7 +241,6 @@ function HomeAdmin() {
                     <table>
                         <thead>
                             <tr>
-                                <th>id</th>
                                 <th>Tên sản phẩm</th>
                                 <th>shortDescription</th>
                                 <th>price</th>
@@ -257,9 +256,11 @@ function HomeAdmin() {
                         <tbody>
                             {allProduct.map((product) => (
                                 <tr key={product.id}>
-                                    <td>{product.id}</td>
                                     <td>{product.name}</td>
-                                    <td dangerouslySetInnerHTML={{ __html: product.shortDescription }}></td>
+                                    <td
+                                        dangerouslySetInnerHTML={{ __html: product.shortDescription }}
+                                        className={cx('td_sortdes')}
+                                    ></td>
                                     <td>{product.price}</td>
                                     <td>{product.quantity}</td>
                                     <td>{product.category.name}</td>

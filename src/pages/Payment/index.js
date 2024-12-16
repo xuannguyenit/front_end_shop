@@ -116,33 +116,39 @@ function Payment() {
 
                 <div className={cx('payment-method')}>
                     <h3>Chọn phương thức thanh toán</h3>
-                    <label>
-                        <input
-                            type="radio"
-                            name="paymentMethod"
-                            value="creditCard"
-                            onChange={(e) => setPaymentMethod(e.target.value)}
-                        />
-                        Thẻ tín dụng
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="paymentMethod"
-                            value="bankTransfer"
-                            onChange={(e) => setPaymentMethod(e.target.value)}
-                        />
-                        Chuyển khoản ngân hàng
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="paymentMethod"
-                            value="cod"
-                            onChange={(e) => setPaymentMethod(e.target.value)}
-                        />
-                        Thanh toán khi nhận hàng (COD)
-                    </label>
+                    <div className={cx('payment-method-item')}>
+                        <p>
+                            Thẻ tín dụng
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="creditCard"
+                                onChange={(e) => setPaymentMethod(e.target.value)}
+                            />
+                        </p>
+                    </div>
+                    <div className={cx('payment-method-item')}>
+                        <p>
+                            Chuyển khoản ngân hàng
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="bankTransfer"
+                                onChange={(e) => setPaymentMethod(e.target.value)}
+                            />
+                        </p>
+                    </div>
+                    <div className={cx('payment-method-item')}>
+                        <p>
+                            Thanh toán khi nhận hàng (COD)
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="cod"
+                                onChange={(e) => setPaymentMethod(e.target.value)}
+                            />
+                        </p>
+                    </div>
                 </div>
                 <button onClick={handlePayment} className={cx('submit-payment')}>
                     Xác nhận thanh toán

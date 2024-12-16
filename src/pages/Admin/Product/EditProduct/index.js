@@ -151,7 +151,9 @@ function EditProduct() {
             <h2>Thay đổi thông tin sản phẩm</h2>
             <form onSubmit={handleSubmit} className={cx('main__form')}>
                 <div className={cx('form-group')}>
-                    <label htmlFor="name">Tên sản phẩm</label>
+                    <div className={cx('label__item')}>
+                        <label htmlFor="name">Tên sản phẩm</label>
+                    </div>
                     <input
                         type="text"
                         id="name"

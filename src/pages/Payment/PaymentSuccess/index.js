@@ -51,52 +51,6 @@ const PaymentSuccess = () => {
         fetchOrderDetails();
     }, [orderId]);
 
-    // set lại trạng thái cho order khi thanh toán thành công
-    // useEffect(() => {
-    //     const updateOrderStatus = async () => {
-    //         if (vnp_TransactionStatus === '00') {
-    //             // Kiểm tra trạng thái giao dịch thành công
-    //             setLoading(true);
-    //             try {
-    //                 const response = await cartService.updateOrderStatus(orderId); // Cập nhật trạng thái
-    //                 console.log('Trạng thái đơn hàng đã được cập nhật:', response);
-    //             } catch (error) {
-    //                 setError('Không thể cập nhật trạng thái đơn hàng.');
-    //                 console.error('Lỗi khi cập nhật trạng thái đơn hàng:', error);
-    //             } finally {
-    //                 setLoading(false);
-    //             }
-    //         } else {
-    //             console.warn('Giao dịch không thành công, không cập nhật trạng thái đơn hàng.');
-    //         }
-    //     };
-
-    //     updateOrderStatus();
-    // }, [vnp_TransactionStatus, orderId]);
-
-    // useEffect(() => {
-    //     const updateOrderStatus = async () => {
-    //         if (vnp_TransactionStatus === '00' && !hasUpdatedStatus.current) {
-    //             hasUpdatedStatus.current = true; // Đánh dấu đã gọi API
-    //             setLoading(true);
-    //             try {
-    //                 const response = await cartService.updateOrderStatus(orderId);
-    //                 console.log('Trạng thái đơn hàng đã được cập nhật:', response);
-    //             } catch (error) {
-    //                 setError('Không thể cập nhật trạng thái đơn hàng.');
-    //                 console.error('Lỗi khi cập nhật trạng thái đơn hàng:', error);
-    //             } finally {
-    //                 setLoading(false);
-    //             }
-    //         } else if (vnp_TransactionStatus !== '00') {
-    //             console.warn('Giao dịch không thành công, không cập nhật trạng thái đơn hàng.');
-    //         }
-    //     };
-
-    //     if (orderId && vnp_TransactionStatus) {
-    //         updateOrderStatus();
-    //     }
-    // }, [orderId, vnp_TransactionStatus]);
     useEffect(() => {
         const updateOrderStatus = async () => {
             // Kiểm tra xem đã cập nhật trạng thái đơn hàng chưa

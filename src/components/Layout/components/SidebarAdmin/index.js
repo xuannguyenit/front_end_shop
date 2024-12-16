@@ -21,11 +21,18 @@ function SidebarAdmin() {
                 </div>
                 <div className={cx('menu__siderbar')}>
                     <ul>
-                        <li>Dashboard</li>
+                        <Link to={'/admin/dashboard'}>
+                            <li>Dashboard</li>
+                        </Link>
+                        <Link to={'/admin/home'}>
+                            <li>Home</li>
+                        </Link>
 
-                        <li>
-                            <Link to={'/admin/addimage'}>UpLoad Images</Link>
-                        </li>
+                        <ul>
+                            <Link to={'/admin/addimage'}>
+                                <li>UpLoad Images </li>
+                            </Link>
+                        </ul>
                         <li className={cx({ open: openUser })} onClick={() => setOpenUser(!openUser)}>
                             <span>Users</span>
                             {openUser && (
@@ -33,7 +40,7 @@ function SidebarAdmin() {
                                     <Link to={'/admin/users'}>
                                         <li>All_user</li>
                                     </Link>
-                                    <Link to={'/admin/users/add'}>
+                                    <Link to={'/admin/users/createadmin'}>
                                         <li>Add_user</li>
                                     </Link>
                                 </ul>
@@ -103,7 +110,6 @@ function SidebarAdmin() {
                             )}
                         </li>
 
-                        <li>Orders</li>
                         <li>Settings</li>
                         <li>Logout</li>
                     </ul>

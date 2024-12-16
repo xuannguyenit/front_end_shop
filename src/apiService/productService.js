@@ -8,6 +8,29 @@ export const getProductById = async (productId) => {
         console.error('Error fetching product by ID:', error.message);
     }
 };
+export const getCountProduct = async () => {
+    if (!isAdmin()) {
+        alert('Bạn không có quyền thực hiện hành động này.');
+        return false;
+    }
+
+    const token = getToken();
+    if (!token) {
+        alert('Bạn cần đăng nhập để thực hiện hành động này.');
+        return false;
+    }
+    try {
+        const response = await request.get(`/product/prod/get/count/product`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log('số lượng sản phẩm: ', response.result);
+        return response.result;
+    } catch (error) {
+        return <p>Không load được sản phẩm</p>;
+    }
+};
 export const removeProduct = async (productId) => {
     if (!isAdmin()) {
         alert('Bạn không có quyền thực hiện hành động này.');
@@ -29,7 +52,6 @@ export const removeProduct = async (productId) => {
         });
 
         if (response && response.code === 1000) {
-            alert('Xóa sản phẩm thành công!');
             return true;
         } else {
             alert('Lỗi xóa sản phẩm: ' + (response.message || 'Có lỗi xảy ra.'));
@@ -45,6 +67,19 @@ export const removeProduct = async (productId) => {
 export const getProductByCategoryId = async (categoryId, page = 1, size = 10) => {
     try {
         const res = await request.get(`/product/prod/category/${categoryId}`, {
+            params: {
+                page: page,
+                size: size,
+            },
+        });
+        return res.result;
+    } catch (error) {
+        console.error('Error fetching products by category ID:', error.message);
+    }
+};
+export const getProductByBrandId = async (brandId, page = 1, size = 10) => {
+    try {
+        const res = await request.get(`/product/prod/brand/${brandId}`, {
             params: {
                 page: page,
                 size: size,
@@ -193,5 +228,19 @@ export const updateProduct = async (
         return res.result;
     } catch (error) {
         console.error('Error updating product:', error.message);
+    }
+};
+
+export const searchProduct = async (keyword) => {
+    try {
+        const response = await request.get(`/product/prod/search`, {
+            params: {
+                keyword: keyword,
+            },
+        });
+        console.log(response.result);
+        return response.result;
+    } catch (error) {
+        return <p>Không sản phẩm nào được tìm thấy</p>;
     }
 };

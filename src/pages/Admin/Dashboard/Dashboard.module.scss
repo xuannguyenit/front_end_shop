@@ -1,0 +1,78 @@
+.wrapper {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.header {
+    margin-bottom: 30px;
+}
+.cards {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+.card {
+    width: 22%;
+    border: 1px solid #ddd;
+    height: 200px;
+    border-radius: 30px;
+    position: relative;
+    background: url('../../../assets/images/anhnen2.jpg');
+    background-size: cover;
+
+    text-align: center;
+    font-size: 2rem;
+    h3 {
+        color: #b8c411;
+        margin: 30px;
+    }
+    p {
+        color: #f44336;
+        font-style: inherit;
+    }
+}
+.filters {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px; /* Khoảng cách giữa các bộ lọc */
+    margin-bottom: 20px;
+
+    label {
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        gap: 8px; /* Khoảng cách giữa text và select box */
+
+        select {
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+                border-color: #888;
+            }
+
+            &:focus {
+                border-color: #4caf50;
+                box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+            }
+        }
+    }
+}
+
+.no-data {
+    text-align: center;
+    font-size: 18px;
+    color: #f44336; /* Màu đỏ nhấn mạnh */
+    font-weight: bold;
+    margin-top: 20px;
+}

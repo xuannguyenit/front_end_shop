@@ -72,7 +72,17 @@ strong {
     margin: 5px 0;
 }
 
-@media (max-width: 768px) {
+.payment-method-item {
+    display: flex;
+    input {
+        font-size: 1.8rem;
+    }
+    label {
+        width: 250px;
+    }
+}
+
+@media (max-width: 300px) {
     .wrapper {
         padding: 10px;
     }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faX } from '@fortawesome/free-solid-svg-icons';
@@ -6,6 +6,8 @@ import * as cartService from '~/apiService/cartService'; // Import hàm gọi AP
 import styles from './Cart.module.scss';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import * as provinceService from '~/apiService/provinceService';
+// import { ToastContext } from '~/context/ToastProvider';
 
 const cx = classNames.bind(styles);
 
@@ -15,35 +17,148 @@ function Cart() {
     const [error, setError] = useState(null);
     const [listItem, setListItem] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [listProvince, setListProvince] = useState([]); // lấy danh sách tỉnh
+    const [listDistrict, setListDistrict] = useState([]); // lấy danh sách huyện
+    const [listWard, setListWard] = useState([]);
+    const [selectedProvinceId, setSelectedProvinceId] = useState(null); // Khai báo state cho selectedProvinceId
+    const [selectedDistrictId, setSelectedDistrictId] = useState(null); // Khai báo state cho selectedDistrictId
+    const [provinceCache, setProvinceCache] = useState({}); // Cache dữ liệu tỉnh thành
+    const [selectedWardId, setSelectedWardId] = useState(null);
+    // const { toast } = useContext(ToastContext);
+    // const alertToastSuccess = () => {
+    //     toast.success('Success');
+    // };
+    // const alertToastError = () => {
+    //     toast.error('error');
+    // };
 
     const userId = localStorage.getItem('userId');
     const navigate = useNavigate();
 
     // Hàm tính tổng giá trị giỏ hàng
+
     const calculateTotalPrice = (items) => {
-        return items.reduce((acc, item) => acc + item.totalPrice * item.productQuantity, 0);
+        if (!Array.isArray(items)) {
+            return 0; // Trả về 0 nếu danh sách sản phẩm không hợp lệ
+        }
+        return items.reduce((total, item) => {
+            const originalPrice = item.productPrice || 0; // Giá gốc
+            const discount = item.discountPercentage || 0; // % Khuyến mãi
+            const discountedPrice = originalPrice - (originalPrice * discount) / 100; // Giá sau khuyến mãi
+            const quantity = item.productQuantity || 0; // Số lượng
+            return total + discountedPrice * quantity; // Tổng cộng
+        }, 0);
     };
 
-    // Gọi API để lấy giỏ hàng
+    const fetchAddress = async (cityId, districtId) => {
+        setLoading(true);
+        try {
+            // Kiểm tra xem tỉnh đã có trong cache chưa
+            if (!provinceCache[cityId]) {
+                const resultProvince = await provinceService.getProvince();
+                setListProvince(resultProvince);
+                setProvinceCache((prevCache) => ({ ...prevCache, [cityId]: resultProvince }));
+            }
+
+            if (cityId) {
+                // Kiểm tra xem huyện đã có trong cache chưa
+                if (!provinceCache[cityId]?.district) {
+                    const resultDistrict = await provinceService.getdistrict(cityId);
+                    setListDistrict(resultDistrict);
+                    setProvinceCache((prevCache) => ({
+                        ...prevCache,
+                        [cityId]: { ...prevCache[cityId], district: resultDistrict },
+                    }));
+                }
+
+                if (districtId) {
+                    const resultWard = await provinceService.getWard(districtId);
+                    setListWard(resultWard);
+                }
+            }
+        } catch (error) {
+            console.error('Không thể tải dữ liệu:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchAddress(); // Gọi hàm khi load trang
+    }, []);
+
+    const handleProvinceChange = (e) => {
+        const selectedCityId = e.target.value;
+        setSelectedProvinceId(selectedCityId);
+        setListWard([]);
+        setListDistrict([]);
+        fetchAddress(selectedCityId);
+
+        // Cập nhật địa chỉ
+        if (selectedCityId && selectedDistrictId) {
+            const selectedProvince = listProvince.find((province) => province.id === selectedCityId);
+            const selectedDistrict = listDistrict.find((district) => district.id === selectedDistrictId);
+            const selectedWard = listWard.find((ward) => ward.id === selectedWardId);
+
+            const address = `${selectedProvince?.name || ''} - ${selectedDistrict?.name || ''} - ${
+                selectedWard?.name || ''
+            }`;
+            setOrderDetails((prevDetails) => ({ ...prevDetails, address }));
+        }
+    };
+
+    const handleDistrictChange = (e) => {
+        const selectedDistrictId = e.target.value;
+        setSelectedDistrictId(selectedDistrictId);
+        fetchAddress(selectedProvinceId, selectedDistrictId);
+
+        // Cập nhật địa chỉ
+        if (selectedProvinceId && selectedDistrictId) {
+            const selectedProvince = listProvince.find((province) => province.id === selectedProvinceId);
+            const selectedDistrict = listDistrict.find((district) => district.id === selectedDistrictId);
+            const selectedWard = listWard.find((ward) => ward.id === selectedWardId);
+
+            const address = `${selectedProvince?.name || ''} - ${selectedDistrict?.name || ''} - ${
+                selectedWard?.name || ''
+            }`;
+            setOrderDetails((prevDetails) => ({ ...prevDetails, address }));
+        }
+    };
+
+    const handleWardChange = (e) => {
+        const selectedWardId = e.target.value;
+        setSelectedWardId(selectedWardId);
+
+        // Cập nhật địa chỉ
+        if (selectedProvinceId && selectedDistrictId && selectedWardId) {
+            const selectedProvince = listProvince.find((province) => province.id === selectedProvinceId);
+            const selectedDistrict = listDistrict.find((district) => district.id === selectedDistrictId);
+            const selectedWard = listWard.find((ward) => ward.id === selectedWardId);
+
+            const address = `${selectedProvince?.name || ''} - ${selectedDistrict?.name || ''} - ${
+                selectedWard?.name || ''
+            }`;
+            setOrderDetails((prevDetails) => ({ ...prevDetails, address }));
+        }
+    };
+
     useEffect(() => {
         const fetchCartData = async () => {
             setLoading(true);
             try {
                 const result = await cartService.getCartById(userId);
-                console.log('API response:', result); // Kiểm tra cấu trúc dữ liệu trả về
                 if (Array.isArray(result)) {
-                    // Kiểm tra nếu result là một mảng
                     setListItem(result);
-                    const total = calculateTotalPrice(result); // Tính tổng giá trị từ mảng result
-                    setTotalPrice(total);
+                    setTotalPrice(calculateTotalPrice(result)); // Sử dụng hàm đã viết lại
                 } else {
-                    setListItem([]); // Nếu không phải mảng, đặt thành mảng trống
+                    setListItem([]);
                     setError('Dữ liệu giỏ hàng không hợp lệ.');
                 }
+                console.log('giỏ hàng: ', result);
             } catch (err) {
                 setError('Không thể tải dữ liệu giỏ hàng. Vui lòng thử lại sau.');
+
                 console.error('Error fetching cart:', err.message);
-                console.log(err.message);
             } finally {
                 setLoading(false);
             }
@@ -51,32 +166,26 @@ function Cart() {
 
         fetchCartData();
     }, [userId]);
-    // thay đổi số lượng sản phẩm trong giỏ hàng
 
     const handleQuantityChange = async (itemId, action) => {
-        // Đặt trạng thái đang xử lý để ngăn người dùng nhấp quá nhanh
         setActionLoading(true);
 
-        // Tìm sản phẩm được cập nhật
         const currentItem = listItem.find((item) => item.id === itemId);
         if (!currentItem) {
-            alert('Không tìm thấy sản phẩm trong giỏ hàng!');
+            // alertToastError();
             setActionLoading(false);
             return;
         }
 
-        // Tính số lượng mới
         const newQuantity = action === 'increase' ? currentItem.productQuantity + 1 : currentItem.productQuantity - 1;
-
-        // Không cho phép số lượng nhỏ hơn 1
         if (newQuantity < 1) {
-            alert('Số lượng sản phẩm không thể nhỏ hơn 1.');
+            // alertToastError();
             setActionLoading(false);
             return;
         }
 
         try {
-            await cartService.updateCart(itemId, newQuantity); // Gọi API cập nhật số lượng
+            await cartService.updateCart(itemId, newQuantity);
             const updatedList = listItem.map((item) =>
                 item.id === itemId ? { ...item, productQuantity: newQuantity } : item,
             );
@@ -84,13 +193,12 @@ function Cart() {
             setTotalPrice(calculateTotalPrice(updatedList)); // Tính lại tổng tiền
         } catch (error) {
             console.error('Error updating cart item:', error.message);
-            alert('Không thể cập nhật số lượng sản phẩm. Vui lòng thử lại sau.');
+            // alertToastError();
         } finally {
-            setActionLoading(false); // Hoàn thành xử lý
+            setActionLoading(false);
         }
     };
 
-    // Xử lý xóa sản phẩm khỏi giỏ hàng
     const handleRemoveItem = async (itemId) => {
         setActionLoading(true);
         try {
@@ -98,14 +206,13 @@ function Cart() {
             if (isDeleted) {
                 const updatedList = listItem.filter((item) => item.id !== itemId);
                 setListItem(updatedList);
-                setTotalPrice(calculateTotalPrice(updatedList));
-                alert('Sản phẩm đã được xóa thành công.');
+                setTotalPrice(calculateTotalPrice(updatedList)); // Tính lại tổng tiền
             } else {
-                alert('Không thể xóa sản phẩm. Vui lòng thử lại!');
+                // alertToastError();
             }
         } catch (error) {
             console.error('Lỗi khi xóa sản phẩm:', error);
-            alert('Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại!');
+            // alertToastError();
         } finally {
             setActionLoading(false);
         }
@@ -153,30 +260,38 @@ function Cart() {
 
         return true;
     };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Lấy tổng giá trị giỏ hàng trước khi gửi
+        const updatedOrderDetails = { ...orderDetails, totalPrice };
 
         // Kiểm tra tính hợp lệ của form trước khi gửi
         if (!validateForm()) {
             return;
         }
+
         try {
             const respone = await cartService.createOrder(
-                orderDetails.fullName,
-                orderDetails.email,
-                orderDetails.phone,
-                orderDetails.address,
+                updatedOrderDetails.fullName,
+                updatedOrderDetails.email,
+                updatedOrderDetails.phone,
+                updatedOrderDetails.address,
+                updatedOrderDetails.totalPrice,
             );
-            console.log('thêm order thành công');
+
+            console.log(respone.result);
 
             navigate(`/payment/${respone.id}`);
-        } catch (error) {}
-
-        console.log('Order submitted:', orderDetails);
-
-        alert('Đơn hàng đã được gửi!');
-        // navigate(`/payment/${respone.}`)
+        } catch (error) {
+            console.error('Error creating order:', error);
+            // alertToastError();
+        }
     };
+    useEffect(() => {
+        setTotalPrice(calculateTotalPrice(listItem));
+    }, [listItem]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -202,7 +317,10 @@ function Cart() {
                         <tr>
                             <th>Sản phẩm</th>
                             <th>Số lượng</th>
-                            <th>Giá</th>
+                            <th>Giá gốc</th>
+                            <th>Khuyến mãi</th>
+                            <th>Giá bán</th>
+                            <th>Tổng tiền</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
@@ -228,6 +346,16 @@ function Cart() {
                                     </div>
                                 </td>
                                 <td>{formatPrice(item.productPrice)}</td>
+                                <td>{item.discountPercentage} %</td>
+                                <td>{item.productPrice - (item.discountPercentage * item.productPrice) / 100}</td>
+                                {/* <td>{item.totalPrice}</td> */}
+                                <td>
+                                    {formatPrice(
+                                        (item.productPrice - (item.discountPercentage * item.productPrice) / 100) *
+                                            item.productQuantity,
+                                    )}
+                                </td>
+
                                 <td>
                                     <button disabled={actionLoading} onClick={() => handleRemoveItem(item.id)}>
                                         <FontAwesomeIcon icon={faX} />
@@ -271,7 +399,6 @@ function Cart() {
                             />
                         </div>
                     </div>
-
                     <div className={cx('group_item')}>
                         <div className={cx('form-group')}>
                             <label>Số điện thoại:</label>
@@ -285,36 +412,73 @@ function Cart() {
                             />
                         </div>
                         <div className={cx('form-group')}>
-                            <label>Địa chỉ người nhận:</label>
-                            <input
-                                name="address"
-                                value={orderDetails.address}
-                                onChange={handleChange}
-                                placeholder="Nhập địa chỉ"
-                                required
-                            ></input>
-                        </div>
-                    </div>
-                    <div className={cx('group_item')}>
-                        <div className={cx('form-group')}>
                             <label>Phương thức vận chuyển:</label>
                             <input
                                 type="text"
                                 name="shippingMethod"
-                                value={orderDetails.shippingMethod}
+                                value={'VNPAY'}
                                 onChange={handleChange}
                                 placeholder="Nhập phương thức vận chuyển"
                             />
                         </div>
+                    </div>
+                    <div className={cx('group_item')}>
                         <div className={cx('form-group')}>
                             <label>Phương thức thanh toán:</label>
                             <input
                                 type="text"
                                 name="paymentMethod"
-                                value={orderDetails.paymentMethod}
+                                value={'VNPAY'}
                                 onChange={handleChange}
                                 placeholder="Nhập phương thức thanh toán"
                             />
+                        </div>
+                    </div>
+                    <div className={cx('group_item')}>
+                        <div className={cx('form-group')}>
+                            <label>Tỉnh/Thành phố:</label>
+                            <select name="province" onChange={handleProvinceChange} value={selectedProvinceId}>
+                                <option value="{''}">Chọn tỉnh thành</option>
+                                {listProvince.map((province) => (
+                                    <option key={province.id} value={province.id}>
+                                        {province.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className={cx('form-group')}>
+                            <label>Huyện/Quận:</label>
+                            <select
+                                name="district"
+                                onChange={handleDistrictChange}
+                                value={selectedDistrictId}
+                                disabled={!selectedProvinceId}
+                            >
+                                <option value="{''}">Chọn huyện/quận</option>
+                                {listDistrict.map((district) => (
+                                    <option key={district.id} value={district.id}>
+                                        {district.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className={cx('form-group')}>
+                            <label>Phường/Xã:</label>
+                            <select
+                                name="ward"
+                                value={orderDetails.ward} // Lưu giá trị phường/xã vào orderDetails
+                                onChange={handleWardChange}
+                                required
+                            >
+                                <option value="{''}">Chọn phường/xã</option>
+                                {listWard.map((ward) => (
+                                    <option key={ward.id} value={ward.id}>
+                                        {ward.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                     </div>
 

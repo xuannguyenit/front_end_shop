@@ -35,6 +35,42 @@ export const register = async (username, password, email, firstName, lastName, d
         throw new Error('Registration failed');
     }
 };
+export const createAdmin = async (username, password, email, firstName, lastName, dob, city) => {
+    if (!isAdmin()) {
+        alert('You do not have permission to perform this action.');
+
+        return;
+    }
+
+    const token = getToken();
+    if (!token) {
+        alert('You need to be logged in to perform this action.');
+        return;
+    }
+    try {
+        const res = await request.post(
+            '/identity/users/create/admin',
+            {
+                username,
+                password,
+                email,
+                firstName,
+                lastName,
+                dob,
+                city,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            },
+        );
+        return res.result;
+    } catch (error) {
+        console.error('Error during registration:', error.message);
+        throw new Error('Registration failed');
+    }
+};
 
 // Hàm lấy token từ localStorage
 // Hàm lấy token từ localStorage
@@ -52,27 +88,47 @@ export const getToken = () => {
     return null;
 };
 
-// Hàm giải mã vai trò người dùng từ token
+// // Hàm kiểm tra xem user có vai trò ROLE_ADMIN không
+// export const isAdmin = () => {
+//     const role = getUserRole();
+//     return role === 'ROLE_ADMIN'; // Kiểm tra xem role có phải là 'ROLE_ADMIN' hay không
+// };
+// hàm kiểm tra xem user đã đăng nhập hay chưa
+export const isLogin = () => {
+    const token = getToken(); // Lấy token từ localStorage
+    return token !== null;
+};
+// // Hàm giải mã vai trò người dùng từ token
+// export const getUserRole = () => {
+//     const token = getToken();
+//     if (token) {
+//         try {
+//             const payload = JSON.parse(atob(token.split('.')[1])); // Giải mã payload của token
+//             return payload.scope || payload.role; // Lấy role từ payload, tùy vào cấu trúc của token
+//         } catch (error) {
+//             console.error('Error decoding token:', error);
+//         }
+//     }
+//     return null;
+// };
+// Hàm lấy scope từ token
 export const getUserRole = () => {
-    const token = getToken();
-    if (token) {
-        try {
-            const payload = JSON.parse(atob(token.split('.')[1])); // Giải mã payload của token
-            return payload.scope || payload.role; // Lấy role từ payload, tùy vào cấu trúc của token
-        } catch (error) {
-            console.error('Error decoding token:', error);
-        }
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    try {
+        // Giải mã payload của token
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.scope; // Trả về scope (có thể là chuỗi nhiều vai trò)
+    } catch (error) {
+        console.error('Error decoding token:', error);
+        return null; // Trả về null nếu có lỗi
     }
-    return null;
 };
 
 // Hàm kiểm tra xem user có vai trò ROLE_ADMIN không
 export const isAdmin = () => {
     const role = getUserRole();
-    return role === 'ROLE_ADMIN'; // Kiểm tra xem role có phải là 'ROLE_ADMIN' hay không
-};
-// hàm kiểm tra xem user đã đăng nhập hay chưa
-export const isLogin = () => {
-    const token = getToken(); // Lấy token từ localStorage
-    return token !== null;
+    // Kiểm tra xem scope có chứa 'ROLE_ADMIN' không
+    return role && role.includes('ROLE_ADMIN');
 };

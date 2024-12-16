@@ -113,13 +113,6 @@ function AddProduct() {
         }
     };
 
-    // const handleDescriptionChange = (value) => {
-    //     setFormData({ ...formData, description: value });
-    // };
-
-    // const handleShortDescriptionChange = (value) => {
-    //     setFormData({ ...formData, shortDescription: value });
-    // };
     const handleDescriptionChange = (value) => {
         setFormData((prev) => ({ ...prev, description: value }));
     };
@@ -197,46 +190,6 @@ function AddProduct() {
                     {errors.price && <p className={cx('error-text')}>{errors.price}</p>}
                 </div>
 
-                {/* <div className={cx('form-group')}>
-                    <div className={cx('label__item')}>
-                        <label htmlFor="discountcodeId">Chọn khuyến mãi</label>
-                    </div>
-                    <select
-                        id="discountcodeId"
-                        name="discountcodeId"
-                        className={cx('form-control')}
-                        value={formData.discountcodeId}
-                        onChange={handleChange}
-                    >
-                        <option value="">Không chọn khuyến mãi</option>
-                        {discountCodes.map((d) => (
-                            <option key={d.id} value={d.id}>
-                                {d.discountPercentage} %
-                            </option>
-                        ))}
-                    </select>
-                    {errors.discountcodeId && <p className={cx('error-text')}>{errors.discountcodeId}</p>}
-                </div> */}
-                {/* <div className={cx('form-group')}>
-                    <div className={cx('label__item')}>
-                        <label htmlFor="discountcodeId">Chọn khuyến mãi</label>
-                    </div>
-                    <select
-                        id="discountcodeId"
-                        name="discountcodeId"
-                        className={cx('form-control')}
-                        value={formData.discountcodeId || ''}
-                        onChange={handleChange}
-                    >
-                        <option value={null}>Không chọn khuyến mãi</option>
-                        {discountCodes.map((d) => (
-                            <option key={d.id} value={d.id}>
-                                {d.discountPercentage} %
-                            </option>
-                        ))}
-                    </select>
-                    {errors.discountcodeId && <p className={cx('error-text')}>{errors.discountcodeId}</p>}
-                </div> */}
                 <div className={cx('form-group')}>
                     <div className={cx('label__item')}>
                         <label htmlFor="discountcodeId">Chọn mức khuyến mãi</label>
@@ -322,8 +275,10 @@ function AddProduct() {
                     <div className={cx('label__item')}>
                         <label htmlFor="imageIds">Chọn hình ảnh</label>
                     </div>
-                    {images.map((image) => (
+                    {/* {images.map((image) => (
                         <div key={image.id} className={cx('image-selection')}>
+                            <div key={image.id} className={cx('image-item')}></div>
+
                             <input
                                 type="checkbox"
                                 id={`image-${image.id}`}
@@ -339,7 +294,27 @@ function AddProduct() {
                                 />
                             </label>
                         </div>
-                    ))}
+                    ))} */}
+                    <div className={cx('image-selection')}>
+                        {images.map((image) => (
+                            <div key={image.id} className={cx('image-item')}>
+                                <input
+                                    type="checkbox"
+                                    checked={formData.imageIds.includes(image.id)}
+                                    onChange={() => handleImageSelection(image.id)}
+                                    id={`image-${image.id}`}
+                                />
+                                <label htmlFor={`image-${image.id}`} className={cx('image-preview')}>
+                                    <img
+                                        className={cx('image__product')}
+                                        src={`data:image/${image.type};base64,${image.data}`}
+                                        alt="img"
+                                        style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                                    />
+                                </label>
+                            </div>
+                        ))}
+                    </div>
                     {errors.imageIds && <p className={cx('error-text')}>{errors.imageIds}</p>}
                 </div>
 
