@@ -77,3 +77,12 @@
 .btn_action {
     margin: 5px;
 }
+.td_sortdes {
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* Hiển thị tối đa 4 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Thêm dấu "..." nếu nội dung bị cắt */
+    line-height: 1.5; /* Khoảng cách dòng */
+    max-height: calc(1.5em * 4);
+}

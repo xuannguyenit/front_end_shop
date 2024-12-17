@@ -7,6 +7,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import styles from './Login.module.scss';
 import classNames from 'classnames/bind';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 
 const Login = () => {
@@ -17,6 +19,7 @@ const Login = () => {
     const [token, setToken] = useState(null);
     const [expiryTime, setExpiryTime] = useState(null);
     const navigate = useNavigate(); // Khởi tạo useNavigate
+    const toastLoginSuccess = () => toast('Login Success!');
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -41,11 +44,11 @@ const Login = () => {
                 localStorage.setItem('userId', userId);
                 console.log(userId);
 
-                alert('Login successful!');
+                toastLoginSuccess();
                 // Điều hướng đến trang chủ sau khi login thành công
                 // Điều hướng dựa trên vai trò của người dùng
                 if (userRole === 'ROLE_ADMIN') {
-                    navigate('/admin/home'); // Điều hướng đến trang admin nếu là admin
+                    navigate('/admin/dashboard'); // Điều hướng đến trang admin nếu là admin
                 } else {
                     navigate('/'); // Điều hướng đến trang chủ nếu không phải admin
                 }

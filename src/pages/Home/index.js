@@ -6,6 +6,8 @@ import * as cartService from '~/apiService/cartService';
 import { Link } from 'react-router-dom';
 import styles from './Home.module.scss';
 import classNames from 'classnames/bind';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
@@ -28,6 +30,30 @@ function Home() {
     // list danh mục
     const [categorys, setCategorys] = useState([]);
     const [cartItem, setCartItem] = useState();
+    // danh sách các toast thông báo
+    const toastAddToCartSuccess = () => {
+        toast('Thêm Giỏ Hàng Thành Công');
+    };
+    const toastAddToCartError = () => {
+        toast.error('Sản Phẩm Đã Hết');
+    };
+    // thực hiện gọi api sản phẩm sale
+
+    useEffect(() => {
+        const fetchProductSale = async () => {
+            setLoading(true);
+            try {
+                const results = await productService.getProductSale('less', page, size);
+                setProductSale(results.data); // Cập nhật với kết quả từ data
+                setTotalPages(results.totalPages); // Cập nhật tổng số trang
+            } catch (error) {
+                setError(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProductSale();
+    }, [page, size]);
 
     useEffect(() => {
         const fetchCategory = async () => {
@@ -46,22 +72,6 @@ function Home() {
     }, [page, size]);
 
     // ------------------
-    // thực hiện gọi api sản phẩm sale
-    useEffect(() => {
-        const fetchProductSale = async () => {
-            setLoading(true);
-            try {
-                const results = await productService.getProductSale('less', page, size);
-                setProductSale(results.data); // Cập nhật với kết quả từ data
-                setTotalPages(results.totalPages); // Cập nhật tổng số trang
-            } catch (error) {
-                setError(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProductSale();
-    }, [page, size]);
 
     // thực hiện gọi api get tất cả sản phẩm và phân trang
     useEffect(() => {
@@ -88,6 +98,7 @@ function Home() {
             setCartItem(result);
         } catch (error) {
             setError(error.message);
+            toastAddToCartError();
         } finally {
             setLoading(false);
         }
@@ -154,7 +165,7 @@ function Home() {
                         </div>
                     ))}
                 </div>
-                <div className={cx('pagination')}>
+                {/* <div className={cx('pagination')}>
                     <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={page === 1}>
                         {'<'}
                     </button>
@@ -166,6 +177,33 @@ function Home() {
                         disabled={page === totalPages}
                     >
                         {'>'}
+                    </button>
+                </div> */}
+                <div className={cx('pagination')}>
+                    <button onClick={() => setPage(1)} disabled={page === 1} title="Trang đầu">
+                        &laquo;&laquo; {/* Biểu tượng mũi tên trái cho trang đầu */}
+                    </button>
+                    <button
+                        onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                        disabled={page === 1}
+                        title="Trang trước"
+                    >
+                        {'<'}
+                    </button>
+
+                    <span>
+                        {page} / {totalPages}
+                    </span>
+
+                    <button
+                        onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                        disabled={page === totalPages}
+                        title="Trang sau"
+                    >
+                        {'>'}
+                    </button>
+                    <button onClick={() => setPage(totalPages)} disabled={page === totalPages} title="Trang cuối">
+                        &raquo;&raquo; {/* Biểu tượng mũi tên phải cho trang cuối */}
                     </button>
                 </div>
             </div>

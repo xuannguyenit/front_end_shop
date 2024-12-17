@@ -4,6 +4,10 @@ import * as productService from '~/apiService/productService'; // Đường dẫ
 import * as cartService from '~/apiService/cartService';
 import styles from './ProductDetail.module.scss';
 import classNames from 'classnames/bind';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const cx = classNames.bind(styles);
 
 function ProductDetail() {
@@ -13,6 +17,13 @@ function ProductDetail() {
     const [loading, setLoading] = useState(true); // Trạng thái tải
     const [error, setError] = useState(null); // Trạng thái lỗi
     const [cartItem, setCartItem] = useState();
+    const navigate = useNavigate();
+    const userId = localStorage.getItem('userId');
+
+    // toast notify
+    const toastLogin = () => {
+        toast.warning('Bạn cần đăng nhập để thực hiện mua hàng');
+    };
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -43,11 +54,15 @@ function ProductDetail() {
             setCartItem(result);
         } catch (error) {
             setError(error.message);
+            toastLogin();
         } finally {
             setLoading(false);
         }
     };
-
+    const handleBuyNow = async (productId) => {
+        await addToCart(productId); // Thêm sản phẩm vào giỏ hàng
+        navigate(`/cart/${userId}`); // Điều hướng người dùng đến trang giỏ hàng
+    };
     if (loading) {
         return <p>Đang tải dữ liệu sản phẩm...</p>;
     }
@@ -81,10 +96,7 @@ function ProductDetail() {
                         <div className={cx('list_image')}>
                             {product.images.map((img, index) => (
                                 <div key={index} className="image__item">
-                                    <img
-                                        src={`data:image/${img.type};base64,${img.data}`}
-                                        alt={`${product.name} - image ${index + 1}`}
-                                    />
+                                    <img src={`data:image/${img.type};base64,${img.data}`} alt={'ảnh sản phẩm'} />
                                 </div>
                             ))}
                         </div>
@@ -121,7 +133,9 @@ function ProductDetail() {
                             <button className={cx('btn__addtocart')} onClick={() => addToCart(product.id)}>
                                 Thêm vào giỏ hàng
                             </button>
-                            <button className={cx('btn__buynow')}>Mua ngay</button>
+                            <button className={cx('btn__buynow')} onClick={() => handleBuyNow(product.id)}>
+                                Mua ngay
+                            </button>
                         </div>
                     </div>
                 </div>

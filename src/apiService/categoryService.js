@@ -1,11 +1,13 @@
 import * as request from '~/utils/http';
 import { getToken, isAdmin } from '~/apiService/authenticationService';
 // có phân trang
-export const getAllCategory = async (type) => {
+export const getAllCategory = async (type, page, size) => {
     try {
         const res = await request.get('product/category/listcate/get', {
             params: {
                 type: 'less',
+                page: page,
+                size: size,
             },
         });
         return res.result;

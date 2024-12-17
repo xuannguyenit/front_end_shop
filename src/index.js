@@ -4,14 +4,16 @@ import ReactDOM from 'react-dom/client';
 import App from '~/App';
 import reportWebVitals from './reportWebVitals';
 import GlobalStyles from '~/components/GlobalStyles';
-
+import { ToastProvider } from '~/context/ToastProvider';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <React.StrictMode>
-        <GlobalStyles>
+    // <React.StrictMode>
+    <GlobalStyles>
+        <ToastProvider>
             <App />
-        </GlobalStyles>
-    </React.StrictMode>,
+        </ToastProvider>
+    </GlobalStyles>,
+    // {/* </React.StrictMode>, */}
 );
 
 reportWebVitals();

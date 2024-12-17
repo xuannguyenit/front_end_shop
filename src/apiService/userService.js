@@ -24,3 +24,26 @@ export const getAllUser = async (id) => {
         console.error('error get brand', error.message);
     }
 };
+export const getCountUser = async (id) => {
+    if (!isAdmin()) {
+        alert('You do not have permission to perform this action.');
+        return;
+    }
+
+    const token = getToken();
+    if (!token) {
+        alert('You need to be logged in to perform this action.');
+        return;
+    }
+    try {
+        const res = await request.get(`/identity/users/get/count`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log(res.result);
+        return res.result;
+    } catch (error) {
+        return <p>Không tải được dữ liệu</p>;
+    }
+};

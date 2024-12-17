@@ -67,7 +67,7 @@ function AddAdmin() {
 
         if (validateForm()) {
             try {
-                const response = await authen.register(
+                const response = await authen.createAdmin(
                     formData.username,
                     formData.password,
                     formData.email,
@@ -76,7 +76,7 @@ function AddAdmin() {
                     formData.dob,
                     formData.city,
                 );
-                setSuccessMessage('Thêm thành công admin tétttttt');
+                setSuccessMessage('Thêm thành công admin ');
                 alert('Thêm thành công tài khoản admin');
                 navigate('/admin/home');
                 console.log('User response:', response);

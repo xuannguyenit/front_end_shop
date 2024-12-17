@@ -49,3 +49,82 @@ export const getAllOrder = async () => {
         console.log('lỗi xảy ra: ', error);
     }
 };
+// thống kê doanh thu theo ngày trong tháng
+export const getDailyRevenueForMonth = async (month, year) => {
+    if (!isAdmin()) {
+        alert('Bạn không đủ quyền truy cập');
+        return;
+    }
+    const token = getToken();
+    if (!token) {
+        alert('Bạn không có quyền truy cập');
+        return;
+    }
+    try {
+        const response = await request.get('/order/orders/get/revenue/day', {
+            params: {
+                month: month,
+                year: year,
+            },
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response.result;
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            alert('Bạn không đủ quyền truy cập. Vui lòng đăng nhập lại.');
+        } else if (error.response && error.response.status === 400) {
+            console.error('Lỗi 400: Yêu cầu không hợp lệ.');
+        } else {
+            console.error('Đã xảy ra lỗi:', error);
+        }
+    }
+};
+// thông kê tổng doanh thu
+export const getTotalRevenu = async () => {
+    if (!isAdmin()) {
+        alert('Bạn không đủ quyền truy cập');
+        return;
+    }
+    const token = getToken();
+    if (!token) {
+        alert('Bạn không có quyền truy cập');
+        return;
+    }
+    try {
+        const response = await request.get('/order/orders/get/revenue', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log(response.result);
+        return response.result;
+    } catch (error) {
+        return <p>Bạn không có quyền truy cập</p>;
+    }
+};
+// thống kê số lượng đơn hàng
+export const getTotalCountOrder = async () => {
+    if (!isAdmin()) {
+        alert('Bạn không đủ quyền truy cập');
+        return;
+    }
+    const token = getToken();
+    if (!token) {
+        alert('Bạn không có quyền truy cập');
+        return;
+    }
+    try {
+        const response = await request.get('/order/orders/get/count/order', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log(response.result);
+        return response.result;
+    } catch (error) {
+        return <p>Không tải được dữ liệu</p>;
+    }
+};

@@ -55,15 +55,12 @@ const handleError = (error) => {
         // Lỗi từ server (mã lỗi 4xx hoặc 5xx)
         console.error(`API Error: ${error.response.status} - ${error.response.statusText}`);
         console.error('Response data:', error.response.data); // In chi tiết lỗi của server
-        alert(`Lỗi từ API: ${error.response.statusText}`);
     } else if (error.request) {
         // Lỗi không nhận được phản hồi từ server
         console.error('No response received from API:', error.request);
-        alert('Không nhận được phản hồi từ server. Kiểm tra kết nối mạng hoặc cấu hình server.');
     } else {
         // Lỗi trong quá trình cấu hình request
         console.error('Error configuring the request:', error.message);
-        alert('Có lỗi xảy ra trong quá trình cấu hình yêu cầu.');
     }
 };
 

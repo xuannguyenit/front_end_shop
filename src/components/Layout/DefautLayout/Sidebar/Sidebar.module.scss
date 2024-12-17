@@ -17,12 +17,13 @@
     background: linear-gradient(25deg, #24a399, #30d6ec);
     color: #fff;
     align-content: center;
-    padding-left: 20px;
 }
 .sidebar__list-item {
     height: 45px;
     border-bottom: 1px solid #ddd;
     align-content: end;
+    box-sizing: border-box;
+    padding-left: 20px;
 }
 a {
     display: -webkit-box;

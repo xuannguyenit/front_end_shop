@@ -48,24 +48,6 @@ function AllOrderOfUser() {
                 {listOrder.map((order) => (
                     <div key={order.id} className={cx('order-item')}>
                         <div className={cx('order-summary')}>
-                            {/* <p>
-                                <strong>Tài khoản:</strong> {userName}
-                            </p>
-                            <p>
-                                <strong>Người nhận:</strong> {order.fullName}
-                            </p>
-                            <p>
-                                <strong>Địa chỉ:</strong> {order.address}
-                            </p>
-                            <p>
-                                <strong>Thời gian:</strong> {order.orderTime}
-                            </p>
-                            <p>
-                                <strong>Tổng tiền:</strong> {order.totalPrice} VNĐ
-                            </p>
-                            <p>
-                                <strong>Trạng thái:</strong> {order.status}
-                            </p> */}
                             <table>
                                 <thead>
                                     <tr>

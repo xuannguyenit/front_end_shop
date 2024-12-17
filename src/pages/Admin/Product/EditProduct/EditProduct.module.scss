@@ -20,8 +20,12 @@ h2 {
     justify-content: space-between;
     margin-bottom: 45px;
 }
+label {
+    font-size: 1.6rem;
+}
 .label__item {
-    min-width: 150px;
+    min-width: 180px;
+    font-size: 2rem;
 }
 .form-control {
     font-size: 1.6rem;

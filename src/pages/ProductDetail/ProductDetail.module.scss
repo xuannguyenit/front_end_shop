@@ -79,10 +79,19 @@
         align-content: center;
     }
 }
+// .detail__item-shortdescription {
+//     min-height: 150px;
+//     max-height: 200px;
+//     color: #686666;
+// }
 .detail__item-shortdescription {
-    min-height: 150px;
-    max-height: 200px;
-    color: #686666;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* Hiển thị tối đa 4 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Thêm dấu "..." nếu nội dung bị cắt */
+    line-height: 1.5; /* Khoảng cách dòng */
+    max-height: calc(1.5em * 4); /* Điều chỉnh chiều cao tối đa tương ứng với 4 dòng */
 }
 .detail__item-price {
     width: 100%;
